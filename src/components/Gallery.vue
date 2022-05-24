@@ -1,57 +1,13 @@
 <template>
   <div class="gallery">
-    <!-- <div class="item" v-for="item in items" @click="logItem(item)">
-      <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
+    <div class="item" v-for="item in items" :key="item.id" @click="logItem(item)">
+      <img class="item__picture" :src="getImgPath(item.imgPath)" :alt="item.altText" />
       <div class="item__content">
         <p class="item__title">{{ item.title }}</p>
         <p class="item__description">{{ item.description }}</p>
         <p class="item__price">{{ item.price }} руб.</p>
       </div>
-    </div> -->
-
-    <div class="item">
-      <img class="item__picture" src="../assets/item_photo.png" alt="test text" />
-      <div class="item__content">
-        <p class="item__title">test</p>
-        <p class="item__description">test2</p>
-        <p class="item__price">1000</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img class="item__picture" src="../assets/item_photo.png" alt="test text" />
-      <div class="item__content">
-        <p class="item__title">test</p>
-        <p class="item__description">test2</p>
-        <p class="item__price">1000</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img class="item__picture" src="../assets/item_photo.png" alt="test text" />
-      <div class="item__content">
-        <p class="item__title">test</p>
-        <p class="item__description">test2</p>
-        <p class="item__price">1000</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img class="item__picture" src="../assets/item_photo.png" alt="test text" />
-      <div class="item__content">
-        <p class="item__title">test</p>
-        <p class="item__description">test2</p>
-        <p class="item__price">1000</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img class="item__picture" src="../assets/item_photo.png" alt="test text" />
-      <div class="item__content">
-        <p class="item__title">test</p>
-        <p class="item__description">test2</p>
-        <p class="item__price">1000</p>
-      </div>
+      <div class="item__deleteBtn"></div>
     </div>
   </div>
 </template>
@@ -64,7 +20,7 @@ export default {
       items: [
         {
           id: 1,
-          imgPath: "../assets/item_photo.png",
+          imgPath: "item_photo",
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
@@ -72,7 +28,7 @@ export default {
         },
         {
           id: 2,
-          imgPath: "../assets/item_photo.png",
+          imgPath: "item_photo",
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
@@ -80,7 +36,7 @@ export default {
         },
         {
           id: 3,
-          imgPath: "../assets/item_photo.png",
+          imgPath: "item_photo",
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
@@ -88,7 +44,7 @@ export default {
         },
         {
           id: 4,
-          imgPath: "../assets/item_photo.png",
+          imgPath: "item_photo",
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
@@ -96,7 +52,7 @@ export default {
         },
         {
           id: 4,
-          imgPath: "../assets/item_photo.png",
+          imgPath: "item_photo",
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
@@ -104,7 +60,7 @@ export default {
         },
         {
           id: 4,
-          imgPath: "../assets/item_photo.png",
+          imgPath: "item_photo",
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
@@ -112,6 +68,12 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    getImgPath(path) {
+      var images = require.context("../assets/", false, /\.png$/);
+      return images("./" + path + ".png");
+    },
   },
 };
 </script>
@@ -126,6 +88,24 @@ export default {
   background: $lightPink;
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04), 0px 6px 10px rgba(0, 0, 0, 0.02);
   border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+
+  &__deleteBtn {
+    display: none;
+    width: 32px;
+    height: 32px;
+    background: $pink url("../assets/delete_icon.png") center no-repeat;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    position: absolute;
+    top: -14px;
+    right: -10px;
+  }
+
+  &:hover &__deleteBtn {
+    display: block;
+  }
 
   &__content {
     padding: 16px;

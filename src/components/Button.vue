@@ -17,5 +17,6 @@ export default {
   outline: none;
   padding: 10px 0px;
   color: $greyText;
+  cursor: pointer;
 }
 </style>

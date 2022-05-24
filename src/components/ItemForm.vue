@@ -1,13 +1,13 @@
 <template>
   <div class="itemForm">
     <form @submit="submitHandler">
-      <label for="formItem_title">Наименование товара</label>
+      <label class="itemForm__required" for="formItem_title">Наименование товара</label>
       <input type="text" placeholder="Введите наименование товара" id="formItem_title" required />
       <label for="formItem_description">Описание товара</label>
       <textarea id="formItem_description" cols="30" rows="10" placeholder="Введите Описание товара"></textarea>
-      <label for="formItem_link">Ссылка на изображение товара</label>
+      <label class="itemForm__required" for="formItem_link">Ссылка на изображение товара</label>
       <input type="text" placeholder="Введите ссылку" id="formItem_link" required />
-      <label for="formItem_price">Цена товара</label>
+      <label class="itemForm__required" for="formItem_price">Цена товара</label>
       <input type="number" placeholder="Введите цену" id="formItem_price" required />
       <Button />
     </form>
@@ -41,6 +41,7 @@ export default {
     color: $darkBlueText;
     display: block;
     margin-bottom: 4px;
+    position: relative;
   }
 
   & input,
@@ -70,6 +71,15 @@ export default {
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
+  }
+
+  &__required::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: $pink;
+    border-radius: 50%;
+    position: absolute;
   }
 }
 </style>
