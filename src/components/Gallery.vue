@@ -7,12 +7,13 @@
         <p class="item__description">{{ item.description }}</p>
         <p class="item__price">{{ item.price }} руб.</p>
       </div>
-      <div class="item__deleteBtn"></div>
+      <div class="item__deleteBtn" @click="deleteItem"></div>
     </div>
   </div>
 </template>
 
 <script>
+import Item from "./Item.vue";
 export default {
   name: "Gallery",
   data() {
@@ -74,6 +75,12 @@ export default {
       var images = require.context("../assets/", false, /\.png$/);
       return images("./" + path + ".png");
     },
+    deleteItem() {
+      console.log("deleting item");
+    },
+  },
+  components: {
+    Item,
   },
 };
 </script>
