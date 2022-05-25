@@ -21,4 +21,10 @@ export default {
 .content {
   display: flex;
 }
+
+@media (max-width: 768px) {
+  .content {
+    display: block;
+  }
+}
 </style>

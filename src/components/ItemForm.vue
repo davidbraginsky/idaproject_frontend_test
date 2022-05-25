@@ -152,7 +152,8 @@ export default {
   padding: 32px;
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04), 0px 6px 10px rgba(0, 0, 0, 0.02);
   border-radius: 4px;
-  min-width: 25%;
+  min-width: 350px;
+  width: 25%;
   margin-right: 16px;
   height: fit-content;
 
@@ -239,5 +240,20 @@ export default {
 input.error,
 textarea.error {
   outline: 1px solid $pink;
+}
+
+@media (max-width: 1024px) {
+  .itemForm {
+    min-width: 300px;
+    width: 30%;
+  }
+}
+
+@media (max-width: 768px) {
+  .itemForm {
+    min-width: unset;
+    width: 100%;
+    margin-bottom: 16px;
+  }
 }
 </style>

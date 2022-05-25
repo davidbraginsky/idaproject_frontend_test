@@ -22,5 +22,6 @@ export default {
   width: 95%;
   margin: 0 auto;
   max-width: 1440px;
+  min-width: 350px;
 }
 </style>
