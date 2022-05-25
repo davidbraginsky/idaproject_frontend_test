@@ -1,26 +1,27 @@
 <template>
   <div class="itemForm">
-    <form @submit="submitHandler" autocomplete="off">
+    <form ref="formRef" @submit.prevent="submitHandler" @keyup="checkForm" autocomplete="off">
       <div class="inputForm__field">
         <label class="itemForm__required" for="formItem_title">Наименование товара</label>
-        <input v-model="itemTitle" ref="formItem_titleRef" type="text" placeholder="Введите наименование товара" id="formItem_title" required />
+        <input v-model="itemTitle" ref="formItem_titleRef" type="text" placeholder="Введите наименование товара" id="formItem_title" />
         <p ref="item_title_error" class="itemForm__errorMsg">{{ titleErrorMsg }}</p>
       </div>
       <div class="inputForm__field">
         <label for="formItem_description">Описание товара</label>
-        <textarea id="formItem_description" cols="30" rows="10" placeholder="Введите Описание товара"></textarea>
+        <textarea ref="formItem_descriptionRef" v-model="itemDescription" id="formItem_description" cols="30" rows="10" placeholder="Введите Описание товара"></textarea>
+        <p ref="item_description_error" class="itemForm__errorMsg">{{ descriptionErrorMsg }}</p>
       </div>
       <div class="inputForm__field">
         <label class="itemForm__required" for="formItem_link">Ссылка на изображение товара</label>
-        <input ref="formItem_linkRef" type="text" placeholder="Введите ссылку" id="formItem_link" required />
+        <input v-model="itemLink" ref="formItem_linkRef" type="text" placeholder="Введите ссылку" id="formItem_link" />
         <p ref="item_link_error" class="itemForm__errorMsg">{{ linkErrorMsg }}</p>
       </div>
       <div class="inputForm__field">
         <label class="itemForm__required" for="formItem_price">Цена товара</label>
-        <input ref="formItem_priceRef" type="number" min="0" placeholder="Введите цену" id="formItem_price" required />
+        <input v-model="itemPrice" ref="formItem_priceRef" type="number" min="0" placeholder="Введите цену" id="formItem_price" />
         <p ref="item_price_error" class="itemForm__errorMsg">{{ priceErrorMsg }}</p>
       </div>
-      <button type="submit" class="btn" :disabled="!isCompleted" @click="addItem">Добавить товар</button>
+      <button type="submit" class="btn" :disabled="!isCompleted">Добавить товар</button>
     </form>
   </div>
 </template>
@@ -30,80 +31,114 @@ export default {
   name: "ItemForm",
   data() {
     return {
-      isCompleted: true,
+      isCompleted: false,
       titleErrorMsg: "empty string",
       priceErrorMsg: "empty string",
       linkErrorMsg: "emtpry string",
+      descriptionErrorMsg: "emtpry string",
       titleIsValidated: false,
       priceIsValidated: false,
       linkIsValidated: false,
+      descriptionIsValidated: false,
       regex: /[<>/{};]/g,
       itemTitle: "",
+      itemLink: "",
+      itemPrice: "",
+      itemDescription: "",
     };
   },
   methods: {
-    addItem(e) {
-      e.preventDefault();
-      console.log(this.itemTitle);
-      // this.validateForm();
+    submitHandler() {
+      this.validateForm();
+      this.resetForm();
     },
     validateForm() {
-      const item_title = this.$refs.formItem_titleRef;
-      const item_price = this.$refs.formItem_priceRef;
-      const item_link = this.$refs.formItem_linkRef;
+      const itemTitleRef = this.$refs.formItem_titleRef;
+      const itemPriceRef = this.$refs.formItem_priceRef;
+      const itemLinkRef = this.$refs.formItem_linkRef;
+      const itemDescriptionRef = this.$refs.formItem_descriptionRef;
 
-      const item_title_error = this.$refs.item_title_error;
-      const item_price_error = this.$refs.item_price_error;
-      const item_link_error = this.$refs.item_link_error;
+      const itemTitleError = this.$refs.item_title_error;
+      const itemPriceError = this.$refs.item_price_error;
+      const itemLinkError = this.$refs.item_link_error;
+      const itemDescriptionError = this.$refs.item_description_error;
 
-      this.validateTitle(item_title, item_title_error);
-      this.validatePrice(item_price, item_price_error);
-      this.validateLink(item_link, item_link_error);
+      this.validateTitle(itemTitleRef, itemTitleError);
+      this.validatePrice(itemPriceRef, itemPriceError);
+      this.validateLink(itemLinkRef, itemLinkError);
+      this.validateDescription(itemDescriptionRef, itemDescriptionError);
+
+      if (this.titleIsValidated && this.priceIsValidated && this.linkIsValidated && this.descriptionIsValidated) {
+        console.log("all data is validated");
+        itemTitleRef.classList.remove("error");
+        itemPriceRef.classList.remove("error");
+        itemLinkRef.classList.remove("error");
+        itemDescriptionRef.classList.remove("error");
+
+        itemTitleError.classList.remove("itemForm__errorMsg--active");
+        itemPriceError.classList.remove("itemForm__errorMsg--active");
+        itemLinkError.classList.remove("itemForm__errorMsg--active");
+        itemDescriptionError.classList.remove("itemForm__errorMsg--active");
+      }
     },
-    validateTitle(title, error) {
-      if (title.value.length <= 0) {
+    validateTitle(titleRef, titleError) {
+      if (this.itemTitle.length <= 0) {
         this.titleErrorMsg = "Поле является обязательным";
-        title.classList.add("error");
-        error.classList.add("itemForm__errorMsg--active");
+        titleRef.classList.add("error");
+        titleError.classList.add("itemForm__errorMsg--active");
         return;
       }
-      if (this.regex.test(title.value)) {
+      if (this.regex.test(this.itemTitle)) {
         this.titleErrorMsg = "Поле содержит недействительные символы";
-        title.classList.add("error");
-        error.classList.add("itemForm__errorMsg--active");
+        titleRef.classList.add("error");
+        titleError.classList.add("itemForm__errorMsg--active");
         return;
       }
       this.titleIsValidated = true;
     },
-    validatePrice(price, error) {
-      if (!price.value) {
+    validatePrice(priceRef, priceError) {
+      if (!this.itemPrice) {
         this.priceErrorMsg = "Поле является обязательным";
-        price.classList.add("error");
-        error.classList.add("itemForm__errorMsg--active");
-        return;
-      }
-      if (this.regex.test(price.value)) {
-        this.priceErrorMsg = "Поле содержит недействительные символы";
-        price.classList.add("error");
-        error.classList.add("itemForm__errorMsg--active");
+        priceRef.classList.add("error");
+        priceError.classList.add("itemForm__errorMsg--active");
         return;
       }
       this.priceIsValidated = true;
     },
-    validateLink(link, error) {
-      if (link.value.length <= 0) {
+    validateLink(linkRef, linkError) {
+      if (this.itemLink.length <= 0) {
         this.linkErrorMsg = "Поле является обязательным";
-        link.classList.add("error");
-        error.classList.add("itemForm__errorMsg--active");
+        linkRef.classList.add("error");
+        linkError.classList.add("itemForm__errorMsg--active");
         return;
       }
-      if (this.regex.test(link.value)) {
+      if (this.regex.test(this.itemLink)) {
         this.linkErrorMsg = "Поле содержит недействительные символы";
-        link.classList.add("error");
-        error.classList.add("itemForm__errorMsg--active");
+        linkRef.classList.add("error");
+        linkError.classList.add("itemForm__errorMsg--active");
         return;
       }
       this.linkIsValidated = true;
+    },
+    validateDescription(descriptionRef, descriptionError) {
+      if (this.regex.test(this.itemDescription)) {
+        this.descriptionErrorMsg = "Поле содержит недействительные символы";
+        descriptionRef.classList.add("error");
+        descriptionError.classList.add("itemForm__errorMsg--active");
+        return;
+      }
+      this.descriptionIsValidated = true;
+    },
+    resetForm() {
+      const formRef = this.$refs.formRef;
+      formRef.reset();
+    },
+    checkForm() {
+      if (this.itemTitle && this.itemLink && this.itemPrice) {
+        this.isCompleted = true;
+      } else {
+        this.isCompleted = false;
+      }
     },
   },
 };
