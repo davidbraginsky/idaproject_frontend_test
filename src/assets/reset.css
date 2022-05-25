@@ -1,0 +1,16 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  background-color: #e5e5e5;
+  font-family: "Source Sans Pro", sans-serif;
+  color: #3f3f3f;
+}
+
+img {
+  width: 100%;
+}

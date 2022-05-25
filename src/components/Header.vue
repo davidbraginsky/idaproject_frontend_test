@@ -23,7 +23,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header {
   margin-top: 32px;
   margin-bottom: 16px;
@@ -65,5 +65,11 @@ export default {
   border-right: 2px solid #b4b4b4;
   transform: rotate(45deg);
   pointer-events: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

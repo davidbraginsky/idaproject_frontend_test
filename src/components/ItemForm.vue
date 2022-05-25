@@ -40,7 +40,7 @@ export default {
       priceIsValidated: false,
       linkIsValidated: false,
       descriptionIsValidated: false,
-      regex: /[<>/{};]/g,
+      regex: /[<>/{};]/gi,
       itemTitle: "",
       itemLink: "",
       itemPrice: "",
@@ -121,11 +121,13 @@ export default {
       this.linkIsValidated = true;
     },
     validateDescription(descriptionRef, descriptionError) {
-      if (this.regex.test(this.itemDescription)) {
+      if (/[<>/{};]/gi.test(this.itemDescription)) {
         this.descriptionErrorMsg = "Поле содержит недействительные символы";
         descriptionRef.classList.add("error");
         descriptionError.classList.add("itemForm__errorMsg--active");
         return;
+      } else {
+        console.log("inside description else block");
       }
       this.descriptionIsValidated = true;
     },
@@ -144,7 +146,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .itemForm {
   background-color: $lightPink;
   padding: 32px;
@@ -156,10 +158,11 @@ export default {
 
   &__errorMsg {
     font-weight: 400;
-    font-size: 8px;
+    font-size: 12px;
     line-height: 10px;
     color: $pink;
     opacity: 0;
+    margin-bottom: 4px;
 
     &--active {
       opacity: 1;
@@ -170,11 +173,11 @@ export default {
     font-family: "Source Sans Pro";
     font-style: normal;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 14px;
     line-height: 13px;
     color: $darkBlueText;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     position: relative;
   }
 
@@ -187,7 +190,7 @@ export default {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     width: 100%;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     font-family: "Source Sans Pro";
     font-style: normal;
     resize: none;
@@ -195,7 +198,7 @@ export default {
     &::placeholder {
       color: $greyText;
       font-weight: 400;
-      font-size: 12px;
+      font-size: 14px;
       line-height: 15px;
     }
   }
@@ -203,7 +206,7 @@ export default {
   & textarea::placeholder {
     color: $greyText;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 15px;
   }
 

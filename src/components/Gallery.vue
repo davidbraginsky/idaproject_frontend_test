@@ -79,13 +79,10 @@ export default {
       console.log("deleting item");
     },
   },
-  components: {
-    Item,
-  },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
