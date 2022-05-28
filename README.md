@@ -26,8 +26,7 @@ Users should be able to:
 - Save data on the backend (reloading does not remove all items)
 - Filter by price and name
 
-
-Technical requirements: 
+Technical requirements:
 
 - Project has to be written in Vue
 - Each component has to be a SFC
@@ -36,14 +35,13 @@ Technical requirements:
 - Only JS allowed
 - Style section has to be scoped or use css-modules
 
-
 ### Screenshot
 
 ![Screenshot of app](./src/assets/screenshot/screenshot.png)
 
-<!-- ### Links
+### Links
 
-[Live Website]() -->
+[Live Website](https://davidbraginsky.github.io/idaproject_frontend_test/)
 
 ## Development
 
@@ -54,7 +52,7 @@ Technical requirements:
 - Node (16.13.1)
 - ESLint
 
-To deploy app locally download files manually or clone the repository. Install all dependencies using `npm install`. Once all dependencies have been installed deploy app using `npm run serve`. 
+To deploy app locally download files manually or clone the repository. Install all dependencies using `npm install`. Once all dependencies have been installed deploy app using `npm run serve`.
 
 ## Author
 

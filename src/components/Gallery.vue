@@ -1,6 +1,6 @@
 <template>
   <div class="gallery">
-    <div class="item" v-for="item in items" :key="item.id" @click="logItem(item)">
+    <div class="item" v-for="item in items" :key="item.id" @click="deleteItem(item)">
       <div class="item__pictureContainer">
         <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
       </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import DB from "../../data/DB";
 
 export default {
@@ -29,8 +29,11 @@ export default {
     this.getData();
   },
   methods: {
-    deleteItem() {
-      // console.log("deleting item");
+    deleteItem({ id }) {
+      const docRef = doc(DB, "items", id);
+      deleteDoc(docRef).then(() => {
+        this.$emit("dbsuccess", "Товар успешно удалён");
+      });
     },
     updateItemPrices() {
       this.items.forEach((item) => {
@@ -42,8 +45,9 @@ export default {
       const colRef = collection(DB, "items");
       const documents = await getDocs(colRef);
 
-      documents.docs.forEach((doc) => {
-        this.items.push(doc.data());
+      documents.docs.forEach((item) => {
+        const itemObj = { ...item.data(), id: item.id };
+        this.items.push(itemObj);
       });
 
       this.updateItemPrices();

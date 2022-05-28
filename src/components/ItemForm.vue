@@ -152,16 +152,16 @@ export default {
       }
     },
     addItem() {
-      // const itemColRef = collection(DB, "items");
-      // addDoc(itemColRef, {
-      //   imgPath: this.itemLink,
-      //   altText: "default alt text for picture",
-      //   title: this.itemTitle,
-      //   description: this.itemDescription,
-      //   price: this.itemPrice,
-      // });
+      const itemColRef = collection(DB, "items");
+      addDoc(itemColRef, {
+        imgPath: this.itemLink,
+        altText: "default alt text for picture",
+        title: this.itemTitle,
+        description: this.itemDescription,
+        price: this.itemPrice,
+      });
       this.isCompleted = false;
-      this.$emit("addedItem");
+      this.$emit("dbsuccess", "Товар добавлен успешно");
     },
   },
 };

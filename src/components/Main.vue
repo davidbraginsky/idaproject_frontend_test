@@ -1,10 +1,10 @@
 <template>
   <main class="content">
-    <ItemForm @addedItem="animationHandler" />
-    <GalleryComp />
+    <ItemForm @dbsuccess="animationHandler" />
+    <GalleryComp @dbsuccess="animationHandler" />
     <transition name="fade">
       <div v-if="isVisible" class="boxContainer">
-        <p class="box">Item was added</p>
+        <p class="box">{{ boxText }}</p>
       </div>
     </transition>
   </main>
@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       isVisible: false,
+      boxText: null,
     };
   },
   methods: {
@@ -32,8 +33,8 @@ export default {
         this.isVisible = false;
       }, 1500);
     },
-    animationHandler() {
-      console.log("animation stuff");
+    animationHandler(text) {
+      this.boxText = text;
       this.showBox();
     },
   },
@@ -52,7 +53,7 @@ export default {
 }
 
 .boxContainer {
-  position: absolute;
+  position: fixed;
   top: 15px;
   left: 0;
   display: flex;
