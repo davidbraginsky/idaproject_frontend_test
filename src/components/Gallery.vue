@@ -17,63 +17,11 @@ export default {
   name: "GalleryComp",
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          imgPath: "item_photo",
-          altText: "picture of a camera",
-          title: "Наименование товара",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 25350,
-        },
-        {
-          id: 2,
-          imgPath: "item_photo",
-          altText: "picture of a camera",
-          title: "Наименование товара",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 17000,
-        },
-        {
-          id: 3,
-          imgPath: "item_photo",
-          altText: "picture of a camera",
-          title: "Наименование товара",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 22000,
-        },
-        {
-          id: 4,
-          imgPath: "item_photo",
-          altText: "picture of a camera",
-          title: "Наименование товара",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 500,
-        },
-        {
-          id: 4,
-          imgPath: "item_photo",
-          altText: "picture of a camera",
-          title: "Наименование товара",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 500,
-        },
-        {
-          id: 4,
-          imgPath: "item_photo",
-          altText: "picture of a camera",
-          title: "Наименование товара",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 500,
-        },
-      ],
+      items: [],
     };
   },
-  beforeMount() {
-    this.items.forEach((item) => {
-      // eslint-disable-next-line no-param-reassign
-      item.price = new Intl.NumberFormat("fr-FR").format(item.price);
-    });
+  mounted() {
+    this.getData();
   },
   methods: {
     getImgPath(path) {
@@ -82,6 +30,18 @@ export default {
     },
     deleteItem() {
       console.log("deleting item");
+    },
+    updateItemPrices() {
+      this.items.forEach((item) => {
+        // eslint-disable-next-line no-param-reassign
+        item.price = new Intl.NumberFormat("fr-FR").format(item.price);
+      });
+    },
+    async getData() {
+      const response = await fetch("http://localhost:3000/items");
+      const data = await response.json();
+      this.items = data;
+      this.updateItemPrices();
     },
   },
 };
