@@ -44,11 +44,10 @@ export default {
       linkIsValidated: false,
       descriptionIsValidated: false,
       regex: /[<>{};]/gi,
-      itemTitle: "",
-      itemLink: "",
-      itemPrice: "",
-      itemDescription: "",
-      testVariable: "",
+      itemTitle: null,
+      itemLink: null,
+      itemPrice: null,
+      itemDescription: null,
     };
   },
   methods: {
@@ -73,7 +72,6 @@ export default {
       this.validateDescription(itemDescriptionRef, itemDescriptionError);
 
       if (this.titleIsValidated && this.priceIsValidated && this.linkIsValidated && this.descriptionIsValidated) {
-        console.log("all data is validated");
         itemTitleRef.classList.remove("error");
         itemPriceRef.classList.remove("error");
         itemLinkRef.classList.remove("error");
@@ -137,6 +135,14 @@ export default {
     resetForm() {
       const { formRef } = this.$refs;
       formRef.reset();
+      this.itemTitle = null;
+      this.itemLink = null;
+      this.itemPrice = null;
+      this.itemDescription = null;
+      this.titleIsValidated = false;
+      this.linkIsValidated = false;
+      this.descriptionIsValidated = false;
+      this.priceIsValidated = false;
     },
     checkForm() {
       if (this.itemTitle && this.itemLink && this.itemPrice) {
@@ -146,16 +152,16 @@ export default {
       }
     },
     addItem() {
-      console.log("adding item");
-
-      const itemColRef = collection(DB, "items");
-      addDoc(itemColRef, {
-        imgPath: this.itemLink,
-        altText: "default alt text for picture",
-        title: this.itemTitle,
-        description: this.itemDescription,
-        price: this.itemPrice,
-      });
+      // const itemColRef = collection(DB, "items");
+      // addDoc(itemColRef, {
+      //   imgPath: this.itemLink,
+      //   altText: "default alt text for picture",
+      //   title: this.itemTitle,
+      //   description: this.itemDescription,
+      //   price: this.itemPrice,
+      // });
+      this.isCompleted = false;
+      this.$emit("addedItem");
     },
   },
 };

@@ -1,7 +1,12 @@
 <template>
   <main class="content">
-    <ItemForm />
+    <ItemForm @addedItem="animationHandler" />
     <GalleryComp />
+    <transition name="fade">
+      <div v-if="isVisible" class="boxContainer">
+        <p class="box">Item was added</p>
+      </div>
+    </transition>
   </main>
 </template>
 
@@ -15,6 +20,23 @@ export default {
     ItemForm,
     GalleryComp,
   },
+  data() {
+    return {
+      isVisible: false,
+    };
+  },
+  methods: {
+    showBox() {
+      this.isVisible = true;
+      setTimeout(() => {
+        this.isVisible = false;
+      }, 1500);
+    },
+    animationHandler() {
+      console.log("animation stuff");
+      this.showBox();
+    },
+  },
 };
 </script>
 
@@ -27,5 +49,34 @@ export default {
   .content {
     display: block;
   }
+}
+
+.boxContainer {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.box {
+  background: $green;
+  font-size: 18px;
+  padding: 20px 50px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.4s;
 }
 </style>

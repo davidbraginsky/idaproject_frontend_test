@@ -1,7 +1,9 @@
 <template>
   <div class="gallery">
     <div class="item" v-for="item in items" :key="item.id" @click="logItem(item)">
-      <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
+      <div class="item__pictureContainer">
+        <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
+      </div>
       <div class="item__content">
         <p class="item__title">{{ item.title }}</p>
         <p class="item__description">{{ item.description }}</p>
@@ -115,6 +117,16 @@ export default {
     font-weight: 600;
     font-size: 24px;
     line-height: 30px;
+  }
+
+  &__pictureContainer {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__picture {
+    max-height: 250px;
+    max-width: 100%;
   }
 }
 </style>
