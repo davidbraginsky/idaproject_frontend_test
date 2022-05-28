@@ -25,7 +25,7 @@ export default {
           altText: "picture of a camera",
           title: "Наименование товара",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          price: 4000,
+          price: 25350,
         },
         {
           id: 2,
@@ -69,6 +69,12 @@ export default {
         },
       ],
     };
+  },
+  beforeMount() {
+    console.log("doing stuff");
+    this.items.forEach((item) => {
+      item.price = new Intl.NumberFormat("fr-FR").format(item.price);
+    });
   },
   methods: {
     getImgPath(path) {
