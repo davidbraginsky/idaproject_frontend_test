@@ -1,18 +1,19 @@
 <template>
   <main class="content">
     <ItemForm />
-    <Gallery />
+    <GalleryComp />
   </main>
 </template>
 
 <script>
 import ItemForm from "./ItemForm.vue";
-import Gallery from "./Gallery.vue";
+import GalleryComp from "./Gallery.vue";
+
 export default {
-  name: "Main",
+  name: "MainComp",
   components: {
     ItemForm,
-    Gallery,
+    GalleryComp,
   },
 };
 </script>

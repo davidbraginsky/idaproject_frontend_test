@@ -13,9 +13,8 @@
 </template>
 
 <script>
-import Item from "./Item.vue";
 export default {
-  name: "Gallery",
+  name: "GalleryComp",
   data() {
     return {
       items: [
@@ -71,15 +70,15 @@ export default {
     };
   },
   beforeMount() {
-    console.log("doing stuff");
     this.items.forEach((item) => {
+      // eslint-disable-next-line no-param-reassign
       item.price = new Intl.NumberFormat("fr-FR").format(item.price);
     });
   },
   methods: {
     getImgPath(path) {
-      var images = require.context("../assets/", false, /\.png$/);
-      return images("./" + path + ".png");
+      const images = require.context("../assets/", false, /\.png$/);
+      return images(`./${path}.png`);
     },
     deleteItem() {
       console.log("deleting item");

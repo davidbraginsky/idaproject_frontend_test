@@ -52,6 +52,7 @@ Technical requirements:
 - Vue (3.2.13)
 - SCSS
 - Node (16.13.1)
+- ESLint
 
 To deploy app locally download files manually or clone the repository. Install all dependencies using `npm install`. Once all dependencies have been installed deploy app using `npm run serve`. 
 

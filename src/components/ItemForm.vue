@@ -45,6 +45,7 @@ export default {
       itemLink: "",
       itemPrice: "",
       itemDescription: "",
+      testVariable: "",
     };
   },
   methods: {
@@ -126,13 +127,11 @@ export default {
         descriptionRef.classList.add("error");
         descriptionError.classList.add("itemForm__errorMsg--active");
         return;
-      } else {
-        console.log("inside description else block");
       }
       this.descriptionIsValidated = true;
     },
     resetForm() {
-      const formRef = this.$refs.formRef;
+      const { formRef } = this.$refs;
       formRef.reset();
     },
     checkForm() {
