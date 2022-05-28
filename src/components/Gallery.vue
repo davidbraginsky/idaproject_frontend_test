@@ -1,7 +1,7 @@
 <template>
   <div class="gallery">
     <div class="item" v-for="item in items" :key="item.id" @click="logItem(item)">
-      <img class="item__picture" :src="getImgPath(item.imgPath)" :alt="item.altText" />
+      <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
       <div class="item__content">
         <p class="item__title">{{ item.title }}</p>
         <p class="item__description">{{ item.description }}</p>
@@ -13,6 +13,9 @@
 </template>
 
 <script>
+import { collection, getDocs } from "firebase/firestore";
+import DB from "../../data/DB";
+
 export default {
   name: "GalleryComp",
   data() {
@@ -24,12 +27,8 @@ export default {
     this.getData();
   },
   methods: {
-    getImgPath(path) {
-      const images = require.context("../assets/", false, /\.png$/);
-      return images(`./${path}.png`);
-    },
     deleteItem() {
-      console.log("deleting item");
+      // console.log("deleting item");
     },
     updateItemPrices() {
       this.items.forEach((item) => {
@@ -38,9 +37,13 @@ export default {
       });
     },
     async getData() {
-      const response = await fetch("http://localhost:3000/items");
-      const data = await response.json();
-      this.items = data;
+      const colRef = collection(DB, "items");
+      const documents = await getDocs(colRef);
+
+      documents.docs.forEach((doc) => {
+        this.items.push(doc.data());
+      });
+
       this.updateItemPrices();
     },
   },

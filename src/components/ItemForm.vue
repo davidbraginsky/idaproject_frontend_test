@@ -27,6 +27,9 @@
 </template>
 
 <script>
+import { collection, addDoc } from "firebase/firestore";
+import DB from "../../data/DB";
+
 export default {
   name: "ItemForm",
   data() {
@@ -40,7 +43,7 @@ export default {
       priceIsValidated: false,
       linkIsValidated: false,
       descriptionIsValidated: false,
-      regex: /[<>/{};]/gi,
+      regex: /[<>{};]/gi,
       itemTitle: "",
       itemLink: "",
       itemPrice: "",
@@ -80,6 +83,7 @@ export default {
         itemPriceError.classList.remove("itemForm__errorMsg--active");
         itemLinkError.classList.remove("itemForm__errorMsg--active");
         itemDescriptionError.classList.remove("itemForm__errorMsg--active");
+        this.addItem();
       }
     },
     validateTitle(titleRef, titleError) {
@@ -122,7 +126,7 @@ export default {
       this.linkIsValidated = true;
     },
     validateDescription(descriptionRef, descriptionError) {
-      if (/[<>/{};]/gi.test(this.itemDescription)) {
+      if (/[<>{};]/gi.test(this.itemDescription)) {
         this.descriptionErrorMsg = "Поле содержит недействительные символы";
         descriptionRef.classList.add("error");
         descriptionError.classList.add("itemForm__errorMsg--active");
@@ -140,6 +144,18 @@ export default {
       } else {
         this.isCompleted = false;
       }
+    },
+    addItem() {
+      console.log("adding item");
+
+      const itemColRef = collection(DB, "items");
+      addDoc(itemColRef, {
+        imgPath: this.itemLink,
+        altText: "default alt text for picture",
+        title: this.itemTitle,
+        description: this.itemDescription,
+        price: this.itemPrice,
+      });
     },
   },
 };
