@@ -23,7 +23,7 @@ Users should be able to:
 - Add new items to the list
 - Validate user input
 - Delete items from the list
-- Save data on the backend (reloading does not remove all items)
+- Save data on the backend (refresh does not remove items)
 - Filter by price and name
 
 Technical requirements:
@@ -51,13 +51,15 @@ Technical requirements:
 - SCSS
 - Node (16.13.1)
 - ESLint
+- Firebase
 
 To deploy app locally download files manually or clone the repository. Install all dependencies using `npm install`. Once all dependencies have been installed deploy app using `npm run serve`.
 
 ### Todo
 
-- add fallback content for when all items were deleted (currently displays spinner)
 - add thousands seperator (space) for input form (currently only in gallery output)
+- add unit tests
+- add e2e test
 
 ## Author
 
