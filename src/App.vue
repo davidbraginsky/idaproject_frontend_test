@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <HeaderComp />
-    <MainComp />
+    <HeaderComp @filterChange="testHandler" />
+    <MainComp :filterOption="filterOption" />
   </div>
 </template>
 
@@ -14,6 +14,16 @@ export default {
   components: {
     HeaderComp,
     MainComp,
+  },
+  data() {
+    return {
+      filterOption: null,
+    };
+  },
+  methods: {
+    testHandler(filterOption) {
+      this.filterOption = filterOption;
+    },
   },
 };
 </script>

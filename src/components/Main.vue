@@ -1,7 +1,7 @@
 <template>
   <main class="content">
-    <ItemForm @dbsuccess="animationHandler" />
-    <GalleryComp @dbsuccess="animationHandler" />
+    <ItemForm @dbsuccess="successHandler" />
+    <GalleryComp @dbsuccess="successHandler" :filterOption="filterOption" />
     <transition name="fade">
       <div v-if="isVisible" class="boxContainer">
         <p class="box">{{ boxText }}</p>
@@ -16,6 +16,7 @@ import GalleryComp from "./Gallery.vue";
 
 export default {
   name: "MainComp",
+  props: ["filterOption"],
   components: {
     ItemForm,
     GalleryComp,
@@ -33,7 +34,7 @@ export default {
         this.isVisible = false;
       }, 1500);
     },
-    animationHandler(text) {
+    successHandler(text) {
       this.boxText = text;
       this.showBox();
     },

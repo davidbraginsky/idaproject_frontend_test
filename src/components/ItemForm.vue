@@ -159,6 +159,7 @@ export default {
         title: this.itemTitle,
         description: this.itemDescription,
         price: this.itemPrice,
+        created_at: new Date().getTime(),
       });
       this.isCompleted = false;
       this.$emit("dbsuccess", "Товар добавлен успешно");

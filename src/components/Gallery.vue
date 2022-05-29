@@ -1,6 +1,6 @@
 <template>
   <div class="gallery">
-    <div class="item" v-for="item in items" :key="item.id" @click="deleteItem(item)">
+    <div class="item" v-for="item in items" :key="item.id">
       <div class="item__pictureContainer">
         <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
       </div>
@@ -9,23 +9,24 @@
         <p class="item__description">{{ item.description }}</p>
         <p class="item__price">{{ item.price }} руб.</p>
       </div>
-      <div class="item__deleteBtn" @click="deleteItem"></div>
+      <div class="item__deleteBtn" @click="deleteItem(item)"></div>
     </div>
   </div>
 </template>
 
 <script>
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import DB from "../../data/DB";
 
 export default {
   name: "GalleryComp",
+  props: ["filterOption"],
   data() {
     return {
       items: [],
     };
   },
-  mounted() {
+  created() {
     this.getData();
   },
   methods: {
@@ -41,16 +42,34 @@ export default {
         item.price = new Intl.NumberFormat("fr-FR").format(item.price);
       });
     },
-    async getData() {
+    sortItems(filterOption) {
+      if (filterOption === "mintomax") {
+        this.items.sort((a, b) => a.price - b.price);
+      } else if (filterOption === "maxtomin") {
+        this.items.sort((a, b) => b.price - a.price);
+      } else if (filterOption === "alphabetically") {
+        this.items.sort((a, b) => a.title.localeCompare(b.title));
+      } else {
+        this.items.sort((a, b) => a.created_at - b.created_at);
+      }
+    },
+    getData() {
       const colRef = collection(DB, "items");
-      const documents = await getDocs(colRef);
 
-      documents.docs.forEach((item) => {
-        const itemObj = { ...item.data(), id: item.id };
-        this.items.push(itemObj);
+      onSnapshot(colRef, (snapshot) => {
+        this.items = [];
+        snapshot.docs.forEach((item) => {
+          const itemObj = { ...item.data(), id: item.id };
+          this.items.push(itemObj);
+        });
       });
 
       this.updateItemPrices();
+    },
+  },
+  watch: {
+    filterOption() {
+      this.sortItems(this.filterOption);
     },
   },
 };
