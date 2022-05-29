@@ -7,7 +7,7 @@ This is my solution to the Frontend Developer Test for Idaproject.
 - [Overview](#overview)
   - [The challenge](#the-challenge)
   - [Screenshot](#screenshot)
-  <!-- - [Links](#links) -->
+  - [Links](#links)
 - [Development](#development)
   - [Built with](#built-with)
 - [Author](#author)
@@ -53,6 +53,11 @@ Technical requirements:
 - ESLint
 
 To deploy app locally download files manually or clone the repository. Install all dependencies using `npm install`. Once all dependencies have been installed deploy app using `npm run serve`.
+
+### Todo
+
+- add fallback content for when all items were deleted (currently displays spinner)
+- add thousands seperator (space) for input form (currently only in gallery output)
 
 ## Author
 

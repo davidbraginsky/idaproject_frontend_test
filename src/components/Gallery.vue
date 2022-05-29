@@ -1,27 +1,29 @@
 <template>
   <div class="gallery-wrapper" :class="{ loaded: hasLoaded }">
-    <div v-if="items.length" class="gallery">
-      <div class="item" v-for="item in items" :key="item.id">
-        <div class="item__pictureContainer">
-          <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
+    <transition name="switch" mode="out-in">
+      <transition-group tag="div" name="item" v-if="items.length" class="gallery" appear="">
+        <div class="item" v-for="item in items" :key="item.id">
+          <div class="item__pictureContainer">
+            <img class="item__picture" :src="item.imgPath" :alt="item.altText" />
+          </div>
+          <div class="item__content">
+            <p class="item__title">{{ item.title }}</p>
+            <p class="item__description">{{ item.description }}</p>
+            <p class="item__price">{{ item.price }} руб.</p>
+          </div>
+          <div class="item__deleteBtn" @click="deleteItem(item)"></div>
         </div>
-        <div class="item__content">
-          <p class="item__title">{{ item.title }}</p>
-          <p class="item__description">{{ item.description }}</p>
-          <p class="item__price">{{ item.price }} руб.</p>
-        </div>
-        <div class="item__deleteBtn" @click="deleteItem(item)"></div>
+      </transition-group>
+      <div v-else>
+        <Spinner v-if="!hasLoaded" />
+        <p v-else>Добавьте товар...</p>
       </div>
-    </div>
-    <div v-else>
-      <Spinner />
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import { onMounted, ref, watch } from "vue";
-
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import DB from "../../data/DB";
 import Spinner from "./Spinner.vue";
@@ -62,7 +64,7 @@ export default {
       } else if (filterOption === "alphabetically") {
         items.value.sort((a, b) => a.title.localeCompare(b.title));
       } else {
-        items.value.sort((a, b) => a.created_at - b.created_at);
+        items.value.sort((a, b) => b.created_at - a.created_at);
       }
     };
     const deleteItem = ({ id }) => {
@@ -180,6 +182,7 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
+  position: relative;
 }
 
 .loaded {
@@ -187,5 +190,34 @@ export default {
   justify-content: unset;
   align-items: unset;
   width: unset;
+}
+
+.item-enter-from,
+.item-leave-to {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.item-enter-active,
+.item-leave-active {
+  transition: all 0.5s;
+}
+
+.item-leave-active {
+  position: absolute;
+}
+
+.item-move {
+  transition: all 0.5s;
+}
+
+.switch-enter-from,
+.switch-leave-to {
+  opacity: 0;
+}
+
+.switch-enter-active,
+.switch-leave-active {
+  transition: all 0.5s;
 }
 </style>
