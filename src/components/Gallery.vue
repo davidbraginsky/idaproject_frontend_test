@@ -1,5 +1,5 @@
 <template>
-  <div class="gallery-wrapper">
+  <div class="gallery-wrapper" :class="{ loaded: hasLoaded }">
     <div v-if="items.length" class="gallery">
       <div class="item" v-for="item in items" :key="item.id">
         <div class="item__pictureContainer">
@@ -20,66 +20,81 @@
 </template>
 
 <script>
+import { onMounted, ref, watch } from "vue";
+
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import DB from "../../data/DB";
 import Spinner from "./Spinner.vue";
 
 export default {
+  emits: ["dbsuccess"],
   name: "GalleryComp",
   props: ["filterOption"],
   components: {
     Spinner,
   },
-  data() {
-    return {
-      items: [],
-    };
-  },
-  mounted() {
-    this.getData();
-  },
-  methods: {
-    deleteItem({ id }) {
-      const docRef = doc(DB, "items", id);
-      deleteDoc(docRef).then(() => {
-        this.$emit("dbsuccess", "Товар успешно удалён");
-      });
-    },
-    updateItemPrices() {
-      this.items.forEach((item) => {
+
+  setup(props, ctx) {
+    const items = ref([]);
+    const hasLoaded = ref(false);
+
+    const turnItemPricesToStringsAndFormat = () => {
+      items.value.forEach((item) => {
         // eslint-disable-next-line no-param-reassign
         item.price = new Intl.NumberFormat("fr-FR").format(item.price);
       });
-    },
-    sortItems(filterOption) {
+    };
+    const turnItemPricesToNumbers = () => {
+      items.value.forEach((item) => {
+        // eslint-disable-next-line no-param-reassign
+        item.price = Number(item.price.replace(/\s/g, ""));
+      });
+    };
+    const sortItems = (filterOption) => {
       if (filterOption === "mintomax") {
-        this.items.sort((a, b) => a.price - b.price);
+        turnItemPricesToNumbers();
+        items.value.sort((a, b) => a.price - b.price);
+        turnItemPricesToStringsAndFormat();
       } else if (filterOption === "maxtomin") {
-        this.items.sort((a, b) => b.price - a.price);
+        turnItemPricesToNumbers();
+        items.value.sort((a, b) => b.price - a.price);
+        turnItemPricesToStringsAndFormat();
       } else if (filterOption === "alphabetically") {
-        this.items.sort((a, b) => a.title.localeCompare(b.title));
+        items.value.sort((a, b) => a.title.localeCompare(b.title));
       } else {
-        this.items.sort((a, b) => a.created_at - b.created_at);
+        items.value.sort((a, b) => a.created_at - b.created_at);
       }
-    },
-    getData() {
+    };
+    const deleteItem = ({ id }) => {
+      const docRef = doc(DB, "items", id);
+      deleteDoc(docRef).then(() => {
+        ctx.emit("dbsuccess", "Товар успешно удалён");
+      });
+    };
+    const getData = () => {
       const colRef = collection(DB, "items");
 
       onSnapshot(colRef, (snapshot) => {
-        this.items = [];
+        items.value = [];
         snapshot.docs.forEach((item) => {
           const itemObj = { ...item.data(), id: item.id };
-          this.items.push(itemObj);
+          items.value.push(itemObj);
         });
+        hasLoaded.value = true;
+        sortItems(props.filterOption);
+        turnItemPricesToStringsAndFormat();
       });
+    };
 
-      this.updateItemPrices();
-    },
-  },
-  watch: {
-    filterOption() {
-      this.sortItems(this.filterOption);
-    },
+    watch(props, () => {
+      sortItems(props.filterOption);
+    });
+
+    onMounted(() => {
+      getData();
+    });
+
+    return { items, deleteItem, hasLoaded };
   },
 };
 </script>
@@ -165,5 +180,12 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+
+.loaded {
+  display: inline-block;
+  justify-content: unset;
+  align-items: unset;
+  width: unset;
 }
 </style>

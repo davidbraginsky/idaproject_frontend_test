@@ -1,11 +1,12 @@
 <template>
   <div class="container">
-    <HeaderComp @filterChange="testHandler" />
+    <HeaderComp @filterChange="filterChangeHandler" />
     <MainComp :filterOption="filterOption" />
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
 import HeaderComp from "./components/HeaderComp.vue";
 import MainComp from "./components/Main.vue";
 
@@ -15,15 +16,14 @@ export default {
     HeaderComp,
     MainComp,
   },
-  data() {
-    return {
-      filterOption: null,
+  setup() {
+    const filterOption = ref("default");
+
+    const filterChangeHandler = (filter) => {
+      filterOption.value = filter;
     };
-  },
-  methods: {
-    testHandler(filterOption) {
-      this.filterOption = filterOption;
-    },
+
+    return { filterChangeHandler, filterOption };
   },
 };
 </script>

@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import ItemForm from "./ItemForm.vue";
 import GalleryComp from "./Gallery.vue";
 
@@ -21,23 +22,24 @@ export default {
     ItemForm,
     GalleryComp,
   },
-  data() {
-    return {
-      isVisible: false,
-      boxText: null,
-    };
-  },
-  methods: {
-    showBox() {
-      this.isVisible = true;
+
+  setup() {
+    const isVisible = ref(false);
+    const boxText = ref(null);
+
+    const showBox = () => {
+      isVisible.value = true;
       setTimeout(() => {
-        this.isVisible = false;
+        isVisible.value = false;
       }, 1500);
-    },
-    successHandler(text) {
-      this.boxText = text;
-      this.showBox();
-    },
+    };
+
+    const successHandler = (text) => {
+      boxText.value = text;
+      showBox();
+    };
+
+    return { isVisible, boxText, showBox, successHandler };
   },
 };
 </script>

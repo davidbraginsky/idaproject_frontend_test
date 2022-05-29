@@ -2,7 +2,7 @@
   <header class="header row">
     <h2 class="heading">Добавление товара</h2>
     <div class="custom-select">
-      <select class="filter" v-model="filterOption" @change="changeHandler">
+      <select class="filter" v-model="filterOption" @change="$emit('filterChange', filterOption)">
         <option value="default">По умолчанию</option>
         <option value="mintomax">По цене min</option>
         <option value="maxtomin">По цене max</option>
@@ -14,16 +14,13 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
-  data() {
-    return {
-      filterOption: "default",
-    };
-  },
-  methods: {
-    changeHandler() {
-      this.$emit("filterChange", this.filterOption);
-    },
+  setup() {
+    const filterOption = ref("default");
+
+    return { filterOption };
   },
 };
 </script>
